@@ -1,5 +1,5 @@
 # qa-ui-taf-gw
-Quality assurance (QA) via the user interface (UI) using the test-automation-framework (TAF) for Guidewire (gw) products.
+Quality assurance (QA) via the user interface (UI) using the [test-automation-framework (TAF)](https://github.com/baloise/test-automation-framework) for Guidewire (gw) products.
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/bf6fa237dd934970991ecba2c66db23e)](https://app.codacy.com/app/open-insurance/qa-ui-taf-gw?utm_source=github.com&utm_medium=referral&utm_content=open-insurance/qa-ui-taf-gw&utm_campaign=Badge_Grade_Dashboard)
 [![Build Status](https://travis-ci.org/open-insurance/qa-ui-taf-gw.svg?branch=master)](https://travis-ci.org/open-insurance/qa-ui-taf-gw)
