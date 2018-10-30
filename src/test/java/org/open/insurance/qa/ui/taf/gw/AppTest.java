@@ -36,7 +36,7 @@ class AppTest {
         final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
         App.main(null);
-        assertEquals("Hello World2!" + System.getProperty("line.separator"), outContent.toString());
+        assertEquals("Hello World!" + System.getProperty("line.separator"), outContent.toString());
         System.setOut(null);
     }
 }
