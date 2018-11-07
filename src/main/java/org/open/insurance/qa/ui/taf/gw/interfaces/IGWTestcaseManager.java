@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 public interface IGWTestcaseManager {
 
   @Retention(RetentionPolicy.RUNTIME)
-  @Target({ElementType.TYPE, ElementType.METHOD})
+  @Target({ElementType.TYPE})
   public @interface TestcaseManager {
     Class<? extends IGWTestcaseManager> value();
   }
