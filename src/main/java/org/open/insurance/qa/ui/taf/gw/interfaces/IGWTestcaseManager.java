@@ -13,6 +13,16 @@ public interface IGWTestcaseManager {
     Class<? extends IGWTestcaseManager> value();
   }
 
+  public IGWApplication getApplication();
+
+  public IGWBrowser getBrowser();
+
+  public IGWEnvironment getEnvironment();
+
+  public IGWLocale getLocale();
+
+  public IGWStack getStack();
+
   public void setApplication(IGWApplication application);
 
   public void setBrowser(IGWBrowser browser);

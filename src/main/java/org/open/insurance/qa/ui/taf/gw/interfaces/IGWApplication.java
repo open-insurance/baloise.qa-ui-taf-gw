@@ -13,6 +13,6 @@ public interface IGWApplication {
     Class<? extends IGWApplication> value();
   }
 
-  public String getUrl(IGWEnvironment environment, IGWStack stack, IGWLocale locale);
+  public String getUrl(IGWTestcaseManager manager);
 
 }

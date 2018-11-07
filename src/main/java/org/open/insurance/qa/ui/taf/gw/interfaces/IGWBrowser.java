@@ -22,7 +22,7 @@ public interface IGWBrowser {
   }
 
   public WebDriver getDriver();
-  
+
   public void killDriver();
 
 }
