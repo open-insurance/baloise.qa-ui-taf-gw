@@ -66,10 +66,10 @@
 			<version>4.12</version>
 		</dependency>
 		<dependency>
-	        <groupId>com.github.baloise.test-automation-framework</groupId>
-	        <artifactId>taf-browser</artifactId>
-	        <version>master-SNAPSHOT</version>
-	    </dependency>
+			<groupId>com.baloise.testing.framework</groupId>
+			<artifactId>taf-browser</artifactId>
+			<version>0.0.8-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 
 	<build>
