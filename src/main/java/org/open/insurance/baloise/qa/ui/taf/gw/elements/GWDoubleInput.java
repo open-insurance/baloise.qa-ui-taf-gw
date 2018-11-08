@@ -17,6 +17,7 @@ package org.open.insurance.baloise.qa.ui.taf.gw.elements;
 
 import com.baloise.testautomation.taf.base.types.TafDouble;
 import com.baloise.testautomation.taf.browser.elements.BrDoubleInput;
+
 public class GWDoubleInput extends BrDoubleInput {
 
   public int nachkommastellen = 2;

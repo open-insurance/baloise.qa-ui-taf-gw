@@ -39,7 +39,7 @@ public interface IGWTestcaseManager {
   public IGWStack getStack();
 
   public void reset();
-  
+
   public void setApplication(IGWApplication application);
 
   public void setBrowser(IGWBrowser browser);

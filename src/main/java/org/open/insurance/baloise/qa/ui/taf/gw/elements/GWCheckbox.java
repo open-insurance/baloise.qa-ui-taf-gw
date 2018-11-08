@@ -27,8 +27,12 @@ import com.baloise.testautomation.taf.browser.elements.BrCheckbox;
 public class GWCheckbox extends BrCheckbox {
 
   @Override
-  public void fillCustom() {
-    String custom = fillValue.getCustom();
+  public void checkCustom() {
+    doCustom(checkValue.getCustom());
+  }
+
+  private void doCustom(String custom) {
+    System.out.println("Starting custom action: " + name + " --> " + custom);
     if ("{notvisible}".equalsIgnoreCase(custom)) {
       Long timeoutInMsecs = component.getBrowserFinder().getTimeoutInMsecs();
       try {
@@ -44,6 +48,11 @@ public class GWCheckbox extends BrCheckbox {
       Assert.fail("element was found but should NOT: " + name);
     }
     Assert.fail("command not implemented yet: " + name + " --> " + custom);
+  }
+
+  @Override
+  public void fillCustom() {
+    doCustom(fillValue.getCustom());
   }
 
   @Override

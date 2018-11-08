@@ -27,22 +27,31 @@ public class GWRadioButton extends BrRadiobutton {
 
   @Override
   public void checkCustom() {
-    String custom = checkValue.getCustom();
+    doCustom(checkValue.getCustom());
+  }
+
+  private void doCustom(String custom) {
+    System.out.println("Starting custom action: " + name + " --> " + custom);
     if ("{notvisible}".equalsIgnoreCase(custom)) {
       Long timeoutInMsecs = component.getBrowserFinder().getTimeoutInMsecs();
       try {
         component.getBrowserFinder().setTimeoutInMsecs(200L);
         find();
       }
-      catch (Throwable t) {
+      catch (Throwable e) {
         return;
       }
       finally {
         component.getBrowserFinder().setTimeoutInMsecs(timeoutInMsecs);
       }
-      Assert.fail("Component visible, but should NOT: " + name);
+      Assert.fail("element was found but should NOT: " + name);
     }
-    Assert.fail("not yet implemented: " + checkValue.getCustom());
+    Assert.fail("command not implemented yet: " + name + " --> " + custom);
+  }
+
+  @Override
+  public void fillCustom() {
+    doCustom(fillValue.getCustom());
   }
 
   @Override
