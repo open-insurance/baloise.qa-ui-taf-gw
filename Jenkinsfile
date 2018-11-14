@@ -33,7 +33,7 @@
         // at least once a day
         cron('H H(0-7) * * *')
         // check every sixty minutes for changes
-        pollSCM('H/60 * * * *')
+        pollSCM('H/5 * * * *')
     }
 
     stages {
