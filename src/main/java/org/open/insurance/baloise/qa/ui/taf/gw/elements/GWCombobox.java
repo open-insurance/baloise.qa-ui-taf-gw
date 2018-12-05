@@ -51,6 +51,10 @@ public class GWCombobox extends BrStringInput {
     if (!canFill()) {
       return;
     }
+    if (fillValue.isCustom()) {
+      fillCustom();
+      return;
+    }
     GWBrFinder finder = (GWBrFinder)component.getBrowserFinder();
     long timeout = finder.getTimeoutInMsecs();
     boolean filled = false;
@@ -75,6 +79,19 @@ public class GWCombobox extends BrStringInput {
     Assert.assertTrue("Not correctly filled: " + name, filled);
   }
 
+  @Override
+  public void fillCustom() {
+    String action = fillValue.getCustom();
+    if (action.startsWith("{isreadonly}")) {
+      String value = action.replace("{isreadonly}", "");
+      WebElement element = find();
+      Assert.assertTrue("Element is not 'readonly', but it should be", "div".equalsIgnoreCase(element.getTagName()));
+      Assert.assertEquals("Text does not match", value, element.getText());
+      return;
+    }
+    Assert.fail("custom action not supported yet: " + action);
+  }
+  
   private void log(String s) {
     System.out.println(s);
   }
