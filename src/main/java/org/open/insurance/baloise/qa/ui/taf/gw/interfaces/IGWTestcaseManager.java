@@ -38,6 +38,8 @@ public interface IGWTestcaseManager {
 
   public IGWStack getStack();
 
+  public void init();
+  
   public void reset();
 
   public void setApplication(IGWApplication application);
