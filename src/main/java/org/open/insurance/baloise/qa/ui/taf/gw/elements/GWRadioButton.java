@@ -46,6 +46,14 @@ public class GWRadioButton extends BrRadiobutton {
       }
       Assert.fail("element was found but should NOT: " + name);
     }
+    if ("{isselected}".equalsIgnoreCase(custom)) {
+      Assert.assertTrue("Radio button NOT selected, but should be", isSelected());
+      return;
+    }
+    if ("{isnotselected}".equalsIgnoreCase(custom)) {
+      Assert.assertFalse("Radio button selected, but should NOT be", isSelected());
+      return;
+    }
     Assert.fail("command not implemented yet: " + name + " --> " + custom);
   }
 
