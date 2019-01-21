@@ -81,7 +81,14 @@ public class GWCombobox extends BrStringInput {
 
   @Override
   public void fillCustom() {
-    String action = fillValue.getCustom();
+    String custom = fillValue.getCustom();
+    String[] actions = custom.split("->");
+    for (String action : actions) {
+      fillCustom(action);
+    }
+  }
+
+  private void fillCustom(String action) {
     if (action.startsWith("{isreadonly}")) {
       String value = action.replace("{isreadonly}", "");
       WebElement element = find();
@@ -89,9 +96,32 @@ public class GWCombobox extends BrStringInput {
       Assert.assertEquals("Text does not match", value, element.getText());
       return;
     }
+    if (action.startsWith("{checkexactly}")) {
+      action = action.replace("{checkexactly}", "");
+      String[] exactElements = action.split(";");
+      find().click();
+      WebElement list = getDriver()
+          .findElement(By.xpath("//div[contains(@class, 'x-boundlist') and not(contains(@style, 'display: none'))]"));
+      List<WebElement> listElements = list.findElements(By.xpath(".//li"));
+      Assert.assertEquals("Number of elements in list is not equal to number of expected elements",
+          exactElements.length, listElements.size());
+
+      for (int i = 0; i < exactElements.length; i++) {
+        WebElement e = listElements.get(i);
+        Assert.assertEquals("Element does not fit", exactElements[i], e.getText());
+      }
+      find().click();
+      return;
+    }
+    if (action.startsWith("{fill}")) {
+      action = action.replace("{fill}", "");
+      setFill(action);
+      fill();
+      return;
+    }
     Assert.fail("custom action not supported yet: " + action);
   }
-  
+
   private void log(String s) {
     System.out.println(s);
   }
