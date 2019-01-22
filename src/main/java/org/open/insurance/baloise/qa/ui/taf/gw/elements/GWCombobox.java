@@ -110,6 +110,11 @@ public class GWCombobox extends BrStringInput {
       Assert.assertEquals("Text does not match", value, element.getText());
       return;
     }
+    if (action.startsWith("{checkvalue}")) {
+      action = action.replace("{checkvalue}", "");
+      Assert.assertEquals("Value of input line does not match", action, find().getAttribute("value"));
+      return;
+    }
     if (action.startsWith("{checkexactly}")) {
       action = action.replace("{checkexactly}", "");
       String[] exactElements = action.split(";");
