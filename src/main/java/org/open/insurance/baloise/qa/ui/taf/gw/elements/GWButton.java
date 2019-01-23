@@ -19,6 +19,10 @@ public class GWButton extends BrButton {
     return find().getAttribute("class").contains("x-btn-disabled");
   }
 
+  public boolean isFocused() {
+    return find().getAttribute("class").contains("x-btn-focus");
+  }
+
   @Override
   public void click() {
     waitUntilEnabled();
