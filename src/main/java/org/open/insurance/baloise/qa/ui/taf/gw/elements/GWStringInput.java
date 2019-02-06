@@ -10,6 +10,20 @@ public class GWStringInput extends BrStringInput {
   @Override
   public void fillCustom() {
     String action = fillValue.getCustom();
+    if (action.equals("{notvisible}")) {
+      Long timeoutInMsecs = component.getBrowserFinder().getTimeoutInMsecs();
+      try {
+        component.getBrowserFinder().setTimeoutInMsecs(200L);
+        find();
+      }
+      catch (Throwable e) {
+        return;
+      }
+      finally {
+        component.getBrowserFinder().setTimeoutInMsecs(timeoutInMsecs);
+      }
+      Assert.fail("element was found but should NOT: " + name);
+    }
     if (action.startsWith("{isreadonly}")) {
       String value = action.replace("{isreadonly}", "");
       WebElement element = find();
