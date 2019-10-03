@@ -43,6 +43,10 @@ public class GWCombobox extends BrStringInput {
       }
       Assert.fail("Component ist visible but should NOT: " + name);
     }
+    if (custom.startsWith("{isreadonly}")) {
+      assertIsReadOnly(custom);
+      return;
+    }
     Assert.fail("Command not implemented yet: " + name + " --> " + checkValue.getCustom());
   }
 
@@ -104,10 +108,7 @@ public class GWCombobox extends BrStringInput {
       Assert.fail("element was found but should NOT: " + name);
     }
     if (action.startsWith("{isreadonly}")) {
-      String value = action.replace("{isreadonly}", "");
-      WebElement element = find();
-      Assert.assertTrue("Element is not 'readonly', but it should be", "div".equalsIgnoreCase(element.getTagName()));
-      Assert.assertEquals("Text does not match", value, element.getText());
+      assertIsReadOnly(action);
       return;
     }
     if (action.startsWith("{checkvalue}")) {
@@ -139,6 +140,13 @@ public class GWCombobox extends BrStringInput {
       return;
     }
     Assert.fail("custom action not supported yet: " + action);
+  }
+
+  private void assertIsReadOnly(String action) {
+    String value = action.replace("{isreadonly}", "");
+    WebElement element = find();
+    Assert.assertTrue("Element is not 'readonly', but it should be", "div".equalsIgnoreCase(element.getTagName()));
+    Assert.assertEquals("Text does not match", value, element.getText());
   }
 
   private void log(String s) {
