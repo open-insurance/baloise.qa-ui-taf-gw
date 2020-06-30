@@ -25,7 +25,7 @@
 
 	<groupId>org.open.insurance.baloise</groupId>
 	<artifactId>qa-ui-taf-gw</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<ciManagement>
@@ -68,7 +68,12 @@
 		<dependency>
 			<groupId>com.baloise.testing.framework</groupId>
 			<artifactId>taf-browser</artifactId>
-			<version>0.0.8-SNAPSHOT</version>
+			<version>0.0.9-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.baloise.testing.framework</groupId>
+			<artifactId>taf-browser-junit4-extensions</artifactId>
+			<version>0.0.9-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 
