@@ -18,6 +18,7 @@ package org.open.insurance.baloise.qa.ui.taf.gw.finder;
 import static org.junit.Assert.assertNotNull;
 
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,6 +68,10 @@ public class GWBrFinder extends BrFinder {
   public void waitUntilLoadingComplete() {
     assertNotNull("Driver is NOT assigend --> no waitingUntilLoadingComplete possible", driver);
     waitForAjaxDone(120);
+  }
+
+  public WebDriver getDriverWithoutWaitUntilLoadingComplete() {
+    return driver;
   }
 
 }
