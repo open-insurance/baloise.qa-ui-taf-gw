@@ -19,9 +19,11 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.open.insurance.baloise.qa.ui.taf.gw.finder.GWBrFinder;
+import org.open.insurance.baloise.qa.ui.taf.gw.finder.GWFrameworkVersion;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
+import com.baloise.testautomation.taf.browser.elements.BrCombobox;
 import com.baloise.testautomation.taf.browser.elements.BrStringInput;
 
 public class GWCombobox extends BrStringInput {
@@ -60,6 +62,33 @@ public class GWCombobox extends BrStringInput {
       return;
     }
     GWBrFinder finder = (GWBrFinder)component.getBrowserFinder();
+    if (finder.getVersion().equals(GWFrameworkVersion.gw10)) {
+      BrCombobox combobox = new BrCombobox();
+      combobox.setComponent(component);
+      combobox.setBy(by);
+      combobox.setFill(fillValue.asTafString());
+      if (fillValue.asString().equals(combobox.get().asString())) {
+        return;
+      }
+      for (int i = 0; i < 5; i++) {
+        try {
+          combobox.click();
+          if (combobox.find().getAttribute("class").contains("gw-focus")) {
+            break;
+          } else {
+            try {
+              Thread.sleep(100L);
+            }
+            catch (Exception e) {
+            }
+          }
+        }
+        catch (Throwable t) {
+        }
+      }
+      combobox.fill();
+      return;
+    }
     long timeout = finder.getTimeoutInMsecs();
     boolean filled = false;
     try {

@@ -18,7 +18,6 @@ package org.open.insurance.baloise.qa.ui.taf.gw.finder;
 import static org.junit.Assert.assertNotNull;
 
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,8 +26,19 @@ import com.baloise.testautomation.taf.browser.elements.BrFinder;
 
 public class GWBrFinder extends BrFinder {
 
+  private GWFrameworkVersion version = GWFrameworkVersion.gw9;
+
+  public GWBrFinder(WebDriver driver, int timeoutInSeconds, GWFrameworkVersion version) {
+    super(driver, timeoutInSeconds);
+    this.version = version;
+  }
+
   public GWBrFinder(WebDriver driver, int timeoutInSeconds) {
     super(driver, timeoutInSeconds);
+  }
+
+  public GWFrameworkVersion getVersion() {
+    return version;
   }
 
   public Object executeJavascript(String script) {
@@ -42,9 +52,12 @@ public class GWBrFinder extends BrFinder {
   }
 
   public boolean isAjaxDone() {
-    String script = "return Ext.Ajax.isLoading()";
-    String result = executeJavascript(script).toString();
-    return result.contains("false");
+    if (version.equals(GWFrameworkVersion.gw9)) {
+      String script = "return Ext.Ajax.isLoading()";
+      String result = executeJavascript(script).toString();
+      return result.contains("false");
+    }
+    return true;
   }
 
   public void waitForAjaxDone(int seconds) {

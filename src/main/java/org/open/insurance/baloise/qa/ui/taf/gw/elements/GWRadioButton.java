@@ -67,6 +67,12 @@ public class GWRadioButton extends BrRadiobutton {
     log("Check if radiobutton is selected: " + name);
     boolean found = false;
     WebElement parent = find();
+    if ("input".equalsIgnoreCase(parent.getTagName())) {
+      if (!parent.getAttribute("class").contains("x-form-radio")) {
+        return parent.isSelected();
+      }
+    }
+    ;
     while (!found) {
       parent = parent.findElement(By.xpath(".."));
       assertNotNull("Radiobutton does not have parent --> selection state cannot be determined", parent);
