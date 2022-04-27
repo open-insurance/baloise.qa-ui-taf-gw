@@ -18,6 +18,8 @@ package org.open.insurance.baloise.qa.ui.taf.gw.elements;
 import static org.junit.Assert.assertNotNull;
 
 import org.junit.Assert;
+import org.open.insurance.baloise.qa.ui.taf.gw.finder.GWBrFinder;
+import org.open.insurance.baloise.qa.ui.taf.gw.finder.GWFrameworkVersion;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
@@ -62,6 +64,10 @@ public class GWCheckbox extends BrCheckbox {
 
   @Override
   public boolean isSelected() {
+    GWBrFinder finder = (GWBrFinder)component.getBrowserFinder();
+    if (finder.getVersion().equals(GWFrameworkVersion.gw10)) {
+      return super.isSelected();
+    }
     boolean found = false;
     WebElement parent = find();
     while (!found) {

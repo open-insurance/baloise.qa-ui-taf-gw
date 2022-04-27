@@ -37,6 +37,10 @@ public class GWBrFinder extends BrFinder {
     super(driver, timeoutInSeconds);
   }
 
+  public boolean isGW10() {
+    return version.equals(GWFrameworkVersion.gw10);
+  }
+  
   public GWFrameworkVersion getVersion() {
     return version;
   }

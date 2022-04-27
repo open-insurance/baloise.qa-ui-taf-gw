@@ -22,7 +22,9 @@ import org.open.insurance.baloise.qa.ui.taf.gw.finder.GWBrFinder;
 import org.open.insurance.baloise.qa.ui.taf.gw.finder.GWFrameworkVersion;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.Select;
 
+import com.baloise.testautomation.taf.base._interfaces.IAnnotations.ByCustom;
 import com.baloise.testautomation.taf.browser.elements.BrCombobox;
 import com.baloise.testautomation.taf.browser.elements.BrStringInput;
 
@@ -63,6 +65,11 @@ public class GWCombobox extends BrStringInput {
     }
     GWBrFinder finder = (GWBrFinder)component.getBrowserFinder();
     if (finder.getVersion().equals(GWFrameworkVersion.gw10)) {
+      if (by instanceof ByCustom) {
+        Select cb = new Select((WebElement)brFindByCustom());
+        cb.selectByVisibleText(fillValueAsString());
+        return;
+      }
       BrCombobox combobox = new BrCombobox();
       combobox.setComponent(component);
       combobox.setBy(by);
