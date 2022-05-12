@@ -1,6 +1,7 @@
 package org.open.insurance.baloise.qa.ui.taf.gw.elements;
 
 import org.junit.Assert;
+import org.open.insurance.baloise.qa.ui.taf.gw.finder.GWBrFinder;
 
 import com.baloise.testautomation.taf.browser.elements.BrButton;
 
@@ -16,11 +17,15 @@ public class GWButton extends BrButton {
   }
 
   public boolean isDisabled() {
-    return find().getAttribute("class").contains("x-btn-disabled");
+    return ((GWBrFinder)component.getBrowserFinder()).safeInvoke(() -> {
+      return find().getAttribute("class").contains("x-btn-disabled");
+    });
   }
 
   public boolean isFocused() {
-    return find().getAttribute("class").contains("x-btn-focus");
+    return ((GWBrFinder)component.getBrowserFinder()).safeInvoke(() -> {
+      return find().getAttribute("class").contains("x-btn-focus");
+    });
   }
 
   @Override

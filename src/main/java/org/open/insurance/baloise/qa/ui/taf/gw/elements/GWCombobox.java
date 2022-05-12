@@ -82,16 +82,15 @@ public class GWCombobox extends BrStringInput {
           combobox.click();
           if (combobox.find().getAttribute("class").contains("gw-focus")) {
             break;
-          } else {
+          }
+          else {
             try {
               Thread.sleep(100L);
             }
-            catch (Exception e) {
-            }
+            catch (Exception e) {}
           }
         }
-        catch (Throwable t) {
-        }
+        catch (Throwable t) {}
       }
       combobox.fill();
       return;
@@ -149,6 +148,14 @@ public class GWCombobox extends BrStringInput {
     }
     if (action.startsWith("{checkvalue}")) {
       action = action.replace("{checkvalue}", "");
+      GWBrFinder finder = (GWBrFinder)component.getBrowserFinder();
+      if (finder.getVersion().equals(GWFrameworkVersion.gw10)) {
+        String text = finder.safeInvoke(() -> {
+          return new Select(find()).getFirstSelectedOption().getText();
+        });
+        Assert.assertEquals("Value of input line does not match", action, text);
+        return;
+      }
       Assert.assertEquals("Value of input line does not match", action, find().getAttribute("value"));
       return;
     }
