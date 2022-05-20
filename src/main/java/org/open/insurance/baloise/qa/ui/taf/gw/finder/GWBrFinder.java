@@ -17,6 +17,7 @@ package org.open.insurance.baloise.qa.ui.taf.gw.finder;
 
 import static org.junit.Assert.assertNotNull;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
@@ -60,6 +61,14 @@ public class GWBrFinder extends BrFinder {
       String script = "return Ext.Ajax.isLoading()";
       String result = executeJavascript(script).toString();
       return result.contains("false");
+    }
+    if (version.equals(GWFrameworkVersion.gw10)) {
+      try {
+        driver.findElement(By.xpath("//div[@class='gw-page-load-bar' (.//div[@style='width: 100%; opacity:0;'] or .//div[@style='width: 100%; opacity: 0;'])]"));
+      }
+      catch (Throwable t) {
+      }
+      return true;
     }
     return true;
   }

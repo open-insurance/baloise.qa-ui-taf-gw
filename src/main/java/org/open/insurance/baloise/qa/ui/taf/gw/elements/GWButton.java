@@ -17,6 +17,12 @@ public class GWButton extends BrButton {
   }
 
   public boolean isDisabled() {
+    if (((GWBrFinder)component.getBrowserFinder()).isGW10()) {
+      return ((GWBrFinder)component.getBrowserFinder()).safeInvoke(() -> {
+        System.out.println(find().getAttribute("id"));
+        return "true".equals(find().getAttribute("aria-disabled"));
+      });
+    }
     return ((GWBrFinder)component.getBrowserFinder()).safeInvoke(() -> {
       return find().getAttribute("class").contains("x-btn-disabled");
     });
@@ -24,7 +30,9 @@ public class GWButton extends BrButton {
 
   public boolean isFocused() {
     return ((GWBrFinder)component.getBrowserFinder()).safeInvoke(() -> {
-      return find().getAttribute("class").contains("x-btn-focus");
+      return find().getAttribute("class").contains("x-btn-focus")
+          // TODO: GW10 after '||'
+          || find().getAttribute("class").contains("gw-focus");
     });
   }
 
