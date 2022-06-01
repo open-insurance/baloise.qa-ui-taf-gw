@@ -64,7 +64,8 @@ public class GWBrFinder extends BrFinder {
     }
     if (version.equals(GWFrameworkVersion.gw10)) {
       try {
-        driver.findElement(By.xpath("//div[@class='gw-page-load-bar' (.//div[@style='width: 100%; opacity:0;'] or .//div[@style='width: 100%; opacity: 0;'])]"));
+        driver.findElement(By.xpath("//div[@class='gw-click-overlay']"));
+//        driver.findElement(By.xpath("//div[@class='gw-page-load-bar' .//div[@class='gw-page-load-bar--inner' and contains(@style, '100%')]"));
       }
       catch (Throwable t) {
       }
