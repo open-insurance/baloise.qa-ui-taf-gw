@@ -57,6 +57,10 @@ public class GWRadioButton extends BrRadiobutton {
       Assert.assertFalse("Radio button selected, but should NOT be", isSelected());
       return;
     }
+    if ("{isreadonly}".equalsIgnoreCase(custom)) {
+      Assert.assertTrue("Radio button NOT readonly, but should be", "div".equals(find().getTagName()));
+      return;
+    }
     Assert.fail("command not implemented yet: " + name + " --> " + custom);
   }
 
