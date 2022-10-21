@@ -25,6 +25,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
 import com.baloise.testautomation.taf.base._interfaces.IAnnotations.ByCustom;
+import com.baloise.testautomation.taf.base.types.TafString;
 import com.baloise.testautomation.taf.browser.elements.BrCombobox;
 import com.baloise.testautomation.taf.browser.elements.BrStringInput;
 
@@ -65,15 +66,22 @@ public class GWCombobox extends BrStringInput {
     }
     GWBrFinder finder = (GWBrFinder)component.getBrowserFinder();
     if (finder.getVersion().equals(GWFrameworkVersion.gw10)) {
+      System.out.println("Combo: " + name + " -> " + fillValueAsString());
       if (by instanceof ByCustom) {
         Select cb = new Select((WebElement)brFindByCustom());
         cb.selectByVisibleText(fillValueAsString());
         return;
       }
       BrCombobox combobox = new BrCombobox();
+      combobox.setName(getName());
       combobox.setComponent(component);
       combobox.setBy(by);
       combobox.setFill(fillValue.asTafString());
+      if ("{checkthatnotexists}".equalsIgnoreCase(fillValue.asString())) {
+        fillValue = TafString.normalString("{custom}{notvisible}");
+        fillCustom();
+        return;
+      }
       if (fillValue.asString().equals(combobox.get().asString())) {
         return;
       }
