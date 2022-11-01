@@ -170,10 +170,19 @@ public class GWCombobox extends BrStringInput {
     if (action.startsWith("{checkexactly}")) {
       action = action.replace("{checkexactly}", "");
       String[] exactElements = action.split(";");
-      find().click();
-      WebElement list = getDriver()
-          .findElement(By.xpath("//div[contains(@class, 'x-boundlist') and not(contains(@style, 'display: none'))]"));
-      List<WebElement> listElements = list.findElements(By.xpath(".//li"));
+      List<WebElement> listElements;
+      GWBrFinder finder = (GWBrFinder)component.getBrowserFinder();
+      if (finder.getVersion().equals(GWFrameworkVersion.gw10)) {
+        listElements = finder.safeInvoke(() -> {
+          return new Select(find()).getOptions();
+        });
+      }
+      else {
+        find().click();
+        WebElement list = getDriver()
+            .findElement(By.xpath("//div[contains(@class, 'x-boundlist') and not(contains(@style, 'display: none'))]"));
+        listElements = list.findElements(By.xpath(".//li"));
+      }
       Assert.assertEquals("Number of elements in list is not equal to number of expected elements",
           exactElements.length, listElements.size());
 

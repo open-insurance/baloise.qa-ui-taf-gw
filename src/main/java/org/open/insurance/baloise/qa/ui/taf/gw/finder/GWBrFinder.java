@@ -41,7 +41,7 @@ public class GWBrFinder extends BrFinder {
   public boolean isGW10() {
     return version.equals(GWFrameworkVersion.gw10);
   }
-  
+
   public GWFrameworkVersion getVersion() {
     return version;
   }
@@ -65,11 +65,12 @@ public class GWBrFinder extends BrFinder {
     if (version.equals(GWFrameworkVersion.gw10)) {
       try {
         driver.findElement(By.xpath("//div[@class='gw-click-overlay']"));
-//        driver.findElement(By.xpath("//div[@class='gw-page-load-bar' .//div[@class='gw-page-load-bar--inner' and contains(@style, '100%')]"));
+        return true;
       }
       catch (Throwable t) {
+        return false;
       }
-      return true;
+      finally {}
     }
     return true;
   }
