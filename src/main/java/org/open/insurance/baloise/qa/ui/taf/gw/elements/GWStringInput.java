@@ -29,14 +29,7 @@ public class GWStringInput extends BrStringInput {
       String value = action.replace("{isreadonly}", "");
       WebElement element = find();
       Assert.assertTrue("Element is not 'readonly', but it should be", "div".equalsIgnoreCase(element.getTagName()));
-      GWBrFinder finder = (GWBrFinder)component.getBrowserFinder();
-      if (finder.isGW10()) {
-        // Numbers are having different separators
-        Assert.assertEquals("Text does not match", value, element.getText().replace("’", "'"));
-      }
-      else {
-        Assert.assertEquals("Text does not match", value, element.getText());
-      }
+      Assert.assertEquals("Text does not match", value, element.getText());
       return;
     }
     Assert.fail("custom action not supported yet: " + action);
