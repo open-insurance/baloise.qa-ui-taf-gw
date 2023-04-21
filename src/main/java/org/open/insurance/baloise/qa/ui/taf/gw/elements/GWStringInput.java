@@ -1,7 +1,6 @@
 package org.open.insurance.baloise.qa.ui.taf.gw.elements;
 
 import org.junit.Assert;
-import org.open.insurance.baloise.qa.ui.taf.gw.finder.GWBrFinder;
 import org.openqa.selenium.WebElement;
 
 import com.baloise.testautomation.taf.browser.elements.BrStringInput;
@@ -30,6 +29,12 @@ public class GWStringInput extends BrStringInput {
       WebElement element = find();
       Assert.assertTrue("Element is not 'readonly', but it should be", "div".equalsIgnoreCase(element.getTagName()));
       Assert.assertEquals("Text does not match", value, element.getText());
+      return;
+    }
+    if (action.startsWith("{isfilledwith}")) {
+      String value = action.replace("{isfilledwith}", "");
+      WebElement element = find();
+      Assert.assertEquals("Element is not correctly filled", value, element.getAttribute("value"));
       return;
     }
     Assert.fail("custom action not supported yet: " + action);
