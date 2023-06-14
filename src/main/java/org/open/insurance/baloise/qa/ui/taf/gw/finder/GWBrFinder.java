@@ -52,7 +52,10 @@ public class GWBrFinder extends BrFinder {
     try {
       result = js.executeScript(script);
     }
-    catch (Exception e) {}
+    catch (Throwable t) {}
+    if (result == null) {
+      result = "";
+    }
     return result;
   }
 
