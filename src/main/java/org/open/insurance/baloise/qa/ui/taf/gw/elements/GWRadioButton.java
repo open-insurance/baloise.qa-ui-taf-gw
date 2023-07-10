@@ -17,7 +17,6 @@ package org.open.insurance.baloise.qa.ui.taf.gw.elements;
 
 import static org.junit.Assert.assertNotNull;
 
-import org.awaitility.Awaitility;
 import org.junit.Assert;
 import org.open.insurance.baloise.qa.ui.taf.gw.finder.GWBrFinder;
 import org.open.insurance.baloise.qa.ui.taf.gw.finder.GWFrameworkVersion;

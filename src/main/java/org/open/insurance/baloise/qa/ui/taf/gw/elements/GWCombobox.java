@@ -67,11 +67,17 @@ public class GWCombobox extends BrStringInput {
     GWBrFinder finder = (GWBrFinder)component.getBrowserFinder();
     if (finder.getVersion().equals(GWFrameworkVersion.gw10)) {
       System.out.println("Combo: " + name + " -> " + fillValueAsString());
+      // TODO GW10 -> braucht es den Code überhaupt? JA! Weil brFindByCustom HIER implementiert ist und nicht auf BrCombobox, siehe weiter unten
+      // TODO GW10 -> diesen Code noch korrigieren, da NICHT für {custom}... ausgelegt -> von...
       if (by instanceof ByCustom) {
         Select cb = new Select((WebElement)brFindByCustom());
         cb.selectByVisibleText(fillValueAsString());
         return;
       }
+      // TODO GW10 - ...bis hierher
+      // Ev. wenn GW9 nicht mehr gebraucht wird, dann GWCombobox ableiten von BrCombobox -> obiger Code wird hinfällig sein, da dann brFindByCustom
+      // am richtigen Ort implementiert ist und aufgerufen wird.
+      
       BrCombobox combobox = new BrCombobox();
       combobox.setName(getName());
       combobox.setComponent(component);
@@ -124,6 +130,48 @@ public class GWCombobox extends BrStringInput {
       finder.setTimeoutInMsecs(timeout);
     }
     Assert.assertTrue("Not correctly filled: " + name, filled);
+  }
+
+  @Override
+  public TafString get() {
+    GWBrFinder finder = (GWBrFinder)component.getBrowserFinder();
+    if (finder.getVersion().equals(GWFrameworkVersion.gw10)) {
+      BrCombobox combobox = new BrCombobox();
+      combobox.setName(getName());
+      combobox.setComponent(component);
+      combobox.setBy(by);
+      return combobox.get();
+    }
+    return super.get();
+  }
+
+
+  @Override
+  public void check() {
+    if (!canCheck()) {
+      return;
+    }
+    if (checkValue.isCustom()) {
+      checkCustom();
+      return;
+    }
+    GWBrFinder finder = (GWBrFinder)component.getBrowserFinder();
+    if (finder.getVersion().equals(GWFrameworkVersion.gw10)) {
+      System.out.println("Combo: " + name + " -> " + checkValueAsString());
+      if (by instanceof ByCustom) {
+        Select cb = new Select((WebElement)brFindByCustom());
+        Assert.assertEquals("Contents does not fit", checkValueAsString(), cb.getFirstSelectedOption().getText());
+        return;
+      }
+      BrCombobox combobox = new BrCombobox();
+      combobox.setName(getName());
+      combobox.setComponent(component);
+      combobox.setBy(by);
+      combobox.setCheck(checkValue.asTafString());
+      combobox.check();
+      return;
+    }
+    super.check();
   }
 
   @Override
