@@ -34,6 +34,10 @@ public class GWCombobox extends BrStringInput {
   @Override
   public void checkCustom() {
     String custom = checkValue.getCustom();
+    if (custom.startsWith("{isreadonly}")) {
+      assertIsReadOnly(custom);
+      return;
+    }
     if ("{notvisible}".equalsIgnoreCase(custom)) {
       Long timeoutInMsecs = component.getBrowserFinder().getTimeoutInMsecs();
       try {

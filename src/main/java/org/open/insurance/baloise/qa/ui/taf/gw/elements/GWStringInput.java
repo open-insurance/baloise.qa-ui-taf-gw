@@ -25,10 +25,7 @@ public class GWStringInput extends BrStringInput {
       Assert.fail("element was found but should NOT: " + name);
     }
     if (action.startsWith("{isreadonly}")) {
-      String value = action.replace("{isreadonly}", "");
-      WebElement element = find();
-      Assert.assertTrue("Element is not 'readonly', but it should be", "div".equalsIgnoreCase(element.getTagName()));
-      Assert.assertEquals("Text does not match", value, element.getText());
+      doIsReadOnly(action);
       return;
     }
     if (action.startsWith("{isfilledwith}")) {
@@ -40,4 +37,20 @@ public class GWStringInput extends BrStringInput {
     Assert.fail("custom action not supported yet: " + action);
   }
 
+  @Override
+  public void checkCustom() {
+    String action = checkValue.getCustom();
+    if (action.startsWith("{isreadonly}")) {
+      doIsReadOnly(action);
+      return;
+    }
+    Assert.fail("custom action not supported yet: " + action);
+  }
+
+  private void doIsReadOnly(String action) {
+    String value = action.replace("{isreadonly}", "");
+    WebElement element = find();
+    Assert.assertTrue("Element is not 'readonly', but it should be", "div".equalsIgnoreCase(element.getTagName()));
+    Assert.assertEquals("Text does not match", value, element.getText());
+  }
 }
