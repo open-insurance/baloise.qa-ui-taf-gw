@@ -15,6 +15,8 @@
  */
 package org.open.insurance.baloise.qa.ui.taf.gw.factory;
 
+import java.lang.reflect.InvocationTargetException;
+
 import org.junit.Assert;
 
 import com.baloise.testautomation.taf.base._interfaces.IComponent;
@@ -24,11 +26,12 @@ public class GWFactory {
   public static <T extends IComponent> T newInstance(Class<T> clazz, IComponent parent) {
     T instance;
     try {
-      instance = (T)clazz.newInstance();
+      instance = (T)clazz.getDeclaredConstructor().newInstance();
       instance.setComponent(parent);
       return instance;
     }
-    catch (InstantiationException | IllegalAccessException e) {}
+    catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+        | NoSuchMethodException | SecurityException e) {}
     Assert.fail("No instance could be created for: " + clazz);
     return null;
   }
