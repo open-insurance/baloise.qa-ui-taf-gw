@@ -17,6 +17,7 @@ package org.open.insurance.baloise.qa.ui.taf.gw.elements;
 
 import java.util.List;
 
+import org.asynchttpclient.request.body.multipart.Part;
 import org.junit.Assert;
 import org.open.insurance.baloise.qa.ui.taf.gw.finder.GWBrFinder;
 import org.open.insurance.baloise.qa.ui.taf.gw.finder.GWFrameworkVersion;
@@ -264,7 +265,31 @@ public class GWCombobox extends BrStringInput {
       fill();
       return;
     }
+    if (action.startsWith("{selectbypartialtext}")) {
+      action = action.replace("{selectbypartialtext}", "");
+      setFill(action);
+      fillWithPartialText();
+      return;
+    }
     Assert.fail("custom action not supported yet: " + action);
+  }
+
+  private void fillWithPartialText() {
+    GWBrFinder finder = (GWBrFinder)component.getBrowserFinder();
+    if (finder.getVersion().equals(GWFrameworkVersion.gw10)) {
+      List<WebElement> options = find().findElements(By.xpath(".//option"));
+      for (WebElement option : options) {
+        String fullText = option.getAttribute("value");
+        if (fullText != null && fullText.contains(fillValueAsString())) {
+          fillWith(fullText);
+          return;
+        }
+      }
+      Assert.fail("Partial text not found in list: " + fillValueAsString());
+    }
+    else {
+      Assert.fail("Not yet implemented for GW9");
+    }
   }
 
   private void assertIsReadOnly(String action) {
