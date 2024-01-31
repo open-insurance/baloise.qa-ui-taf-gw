@@ -71,7 +71,7 @@ public class GWCombobox extends BrStringInput {
       return;
     }
     GWBrFinder finder = (GWBrFinder)component.getBrowserFinder();
-    if (finder.getVersion().equals(GWFrameworkVersion.gw10)) {
+    if (finder.isGW10()) {
       System.out.println("Combo: " + name + " -> " + fillValueAsString());
       // TODO GW10 -> braucht es den Code überhaupt? JA! Weil brFindByCustom HIER implementiert ist und nicht auf
       // BrCombobox, siehe weiter unten
@@ -143,7 +143,7 @@ public class GWCombobox extends BrStringInput {
   @Override
   public TafString get() {
     GWBrFinder finder = (GWBrFinder)component.getBrowserFinder();
-    if (finder.getVersion().equals(GWFrameworkVersion.gw10)) {
+    if (finder.isGW10()) {
       try {
         BrCombobox combobox = new BrCombobox();
         combobox.setName(getName());
@@ -169,7 +169,7 @@ public class GWCombobox extends BrStringInput {
       return;
     }
     GWBrFinder finder = (GWBrFinder)component.getBrowserFinder();
-    if (finder.getVersion().equals(GWFrameworkVersion.gw10)) {
+    if (finder.isGW10()) {
       System.out.println("Combo: " + name + " -> " + checkValueAsString());
       if (by instanceof ByCustom) {
         Select cb = new Select((WebElement)brFindByCustom());
@@ -223,7 +223,7 @@ public class GWCombobox extends BrStringInput {
     if (action.startsWith("{checkvalue}")) {
       action = action.replace("{checkvalue}", "");
       GWBrFinder finder = (GWBrFinder)component.getBrowserFinder();
-      if (finder.getVersion().equals(GWFrameworkVersion.gw10)) {
+      if (finder.isGW10()) {
         String text = finder.safeInvoke(() -> {
           return new Select(find()).getFirstSelectedOption().getText();
         });
@@ -238,7 +238,7 @@ public class GWCombobox extends BrStringInput {
       String[] exactElements = action.split(";");
       List<WebElement> listElements;
       GWBrFinder finder = (GWBrFinder)component.getBrowserFinder();
-      if (finder.getVersion().equals(GWFrameworkVersion.gw10)) {
+      if (finder.isGW10()) {
         listElements = finder.safeInvoke(() -> {
           return new Select(find()).getOptions();
         });
@@ -276,7 +276,7 @@ public class GWCombobox extends BrStringInput {
 
   private void fillWithPartialText() {
     GWBrFinder finder = (GWBrFinder)component.getBrowserFinder();
-    if (finder.getVersion().equals(GWFrameworkVersion.gw10)) {
+    if (finder.isGW10()) {
       List<WebElement> options = find().findElements(By.xpath(".//option"));
       for (WebElement option : options) {
         String fullText = option.getAttribute("value");

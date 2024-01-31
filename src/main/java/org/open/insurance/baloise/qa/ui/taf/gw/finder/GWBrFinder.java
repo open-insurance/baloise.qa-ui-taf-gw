@@ -39,7 +39,11 @@ public class GWBrFinder extends BrFinder {
   }
 
   public boolean isGW10() {
-    return version.equals(GWFrameworkVersion.gw10);
+    return version.equals(GWFrameworkVersion.gw10_2_2) || version.equals(GWFrameworkVersion.gw10_2_3);
+  }
+
+  public boolean isGW10_2_3() {
+    return version.equals(GWFrameworkVersion.gw10_2_3);
   }
 
   public GWFrameworkVersion getVersion() {
@@ -65,7 +69,7 @@ public class GWBrFinder extends BrFinder {
       String result = executeJavascript(script).toString();
       return result.contains("false");
     }
-    if (version.equals(GWFrameworkVersion.gw10)) {
+    if (isGW10()) {
       try {
         driver.findElement(By.xpath("//div[@class='gw-click-overlay']"));
         return true;

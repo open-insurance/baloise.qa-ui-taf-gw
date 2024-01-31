@@ -72,7 +72,11 @@ public class GWRadioButton extends BrRadiobutton {
   public boolean isSelected() {
     log("Check if radiobutton is selected: " + name);
     GWBrFinder finder = (GWBrFinder)component.getBrowserFinder();
-    if (finder.getVersion().equals(GWFrameworkVersion.gw10)) {
+    if (finder.isGW10_2_3()) {
+      Assert.fail("Not yet implemented");
+      return super.isSelected();
+    }
+    if (finder.isGW10()) {
       return super.isSelected();
     }
     boolean found = false;

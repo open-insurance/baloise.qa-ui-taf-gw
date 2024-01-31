@@ -19,7 +19,6 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Assert;
 import org.open.insurance.baloise.qa.ui.taf.gw.finder.GWBrFinder;
-import org.open.insurance.baloise.qa.ui.taf.gw.finder.GWFrameworkVersion;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
@@ -65,7 +64,14 @@ public class GWCheckbox extends BrCheckbox {
   @Override
   public boolean isSelected() {
     GWBrFinder finder = (GWBrFinder)component.getBrowserFinder();
-    if (finder.getVersion().equals(GWFrameworkVersion.gw10)) {
+    if (finder.isGW10_2_3()) {
+      String attribute = find().getAttribute("class");
+      Assert.assertFalse(
+          "Seems to be a hidden input -> isSelected does NOT work! Please adapt way of searching this checkbox: " + name,
+          attribute.contains("hidden"));
+      return attribute.contains("gw-checked");
+    }
+    if (finder.isGW10()) {
       return super.isSelected();
     }
     boolean found = false;
