@@ -57,6 +57,13 @@ public class GWRadioButton extends BrRadiobutton {
       return;
     }
     if ("{isreadonly}".equalsIgnoreCase(custom)) {
+      GWBrFinder finder = (GWBrFinder)component.getBrowserFinder();
+      if (finder.isGW10_2_3()) {
+        String attribute = find().getAttribute("class");
+        Assert.assertTrue("Radio button NOT readonly, but should be",
+            attribute.contains("gw-readonly") && attribute.contains("gw-BooleanRadioValueWidget"));
+        return;
+      }
       Assert.assertTrue("Radio button NOT readonly, but should be", "div".equals(find().getTagName()));
       return;
     }
@@ -73,8 +80,9 @@ public class GWRadioButton extends BrRadiobutton {
     log("Check if radiobutton is selected: " + name);
     GWBrFinder finder = (GWBrFinder)component.getBrowserFinder();
     if (finder.isGW10_2_3()) {
-      Assert.fail("Not yet implemented");
-      return super.isSelected();
+      String attribute = find().getAttribute("class");
+      Assert.assertTrue("Seems NOT to be a radiobutton: " + name, attribute.contains("gw-radioDiv"));
+      return attribute.contains("gw-checked");
     }
     if (finder.isGW10()) {
       return super.isSelected();
@@ -111,7 +119,7 @@ public class GWRadioButton extends BrRadiobutton {
         find().click();
       });
       if (isSelected()) {
-        break;
+        return;
       }
       log("NOT selected after click: " + name + " --> try again");
       try {
@@ -119,6 +127,7 @@ public class GWRadioButton extends BrRadiobutton {
       }
       catch (Exception e) {}
     }
+    Assert.fail("Could NOT select radio button: " + name);
   }
 
 }
