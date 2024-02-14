@@ -49,18 +49,18 @@ public class GWRadioButton extends BrRadiobutton {
       Assert.fail("element was found but should NOT: " + name);
     }
     if ("{isselected}".equalsIgnoreCase(custom)) {
-      Assert.assertTrue("Radio button NOT selected, but should be", isSelected());
+      Assert.assertTrue("Radio button NOT selected, but should be: " + name, isSelected());
       return;
     }
     if ("{isnotselected}".equalsIgnoreCase(custom)) {
-      Assert.assertFalse("Radio button selected, but should NOT be", isSelected());
+      Assert.assertFalse("Radio button selected, but should NOT be: " + name, isSelected());
       return;
     }
     if ("{isreadonly}".equalsIgnoreCase(custom)) {
       GWBrFinder finder = (GWBrFinder)component.getBrowserFinder();
       if (finder.isGW10_2_3()) {
         String attribute = find().getAttribute("class");
-        Assert.assertTrue("Radio button NOT readonly, but should be",
+        Assert.assertTrue("Radio button NOT readonly, but should be: " + name,
             attribute.contains("gw-readonly") && attribute.contains("gw-BooleanRadioValueWidget"));
         return;
       }
@@ -97,7 +97,7 @@ public class GWRadioButton extends BrRadiobutton {
     ;
     while (!found) {
       parent = parent.findElement(By.xpath(".."));
-      assertNotNull("Radiobutton does not have parent --> selection state cannot be determined", parent);
+      assertNotNull("Radiobutton does not have parent --> selection state cannot be determined: " + name, parent);
       String klass = parent.getAttribute("class");
       if (klass != null) {
         if (klass.contains("x-form-type-radio")) {

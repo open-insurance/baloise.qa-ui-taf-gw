@@ -48,6 +48,20 @@ public class GWCheckbox extends BrCheckbox {
       }
       Assert.fail("element was found but should NOT: " + name);
     }
+    if ("{isselected}".equalsIgnoreCase(custom)) {
+      Assert.assertTrue("is NOT selected, but should be", isSelected());
+      return;
+    }
+    if ("{isnotselected}".equalsIgnoreCase(custom)) {
+      Assert.assertFalse("is selected, but should NOT be", isSelected());
+      return;
+    }
+    if ("{alwaysincluded}".equalsIgnoreCase(custom)) {
+      String clazz = find().findElement(By.xpath("./../..")).getAttribute("class");
+      Assert.assertNotNull(clazz);
+      Assert.assertTrue("Checkbox seems to be visible, but should be hidden: " + name, clazz.contains("gw-hidden"));
+      return;
+    }
     Assert.fail("command not implemented yet: " + name + " --> " + custom);
   }
 

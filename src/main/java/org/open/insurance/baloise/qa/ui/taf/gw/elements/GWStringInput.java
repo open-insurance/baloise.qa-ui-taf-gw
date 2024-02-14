@@ -31,10 +31,10 @@ public class GWStringInput extends BrStringInput {
     if (action.startsWith("{isfilledwith}")) {
       String value = action.replace("{isfilledwith}", "");
       WebElement element = find();
-      Assert.assertEquals("Element is not correctly filled", value, element.getAttribute("value"));
+      Assert.assertEquals("Element is not correctly filled: " + name, value, element.getAttribute("value"));
       return;
     }
-    Assert.fail("custom action not supported yet: " + action);
+    Assert.fail("custom action not supported yet: " + name + " -> " + action);
   }
 
   @Override
@@ -50,7 +50,7 @@ public class GWStringInput extends BrStringInput {
   private void doIsReadOnly(String action) {
     String value = action.replace("{isreadonly}", "");
     WebElement element = find();
-    Assert.assertTrue("Element is not 'readonly', but it should be", "div".equalsIgnoreCase(element.getTagName()));
-    Assert.assertEquals("Text does not match", value, element.getText());
+    Assert.assertTrue("Element is not 'readonly', but it should be: " + name, "div".equalsIgnoreCase(element.getTagName()));
+    Assert.assertEquals("Text does not match: " + name, value, element.getText());
   }
 }

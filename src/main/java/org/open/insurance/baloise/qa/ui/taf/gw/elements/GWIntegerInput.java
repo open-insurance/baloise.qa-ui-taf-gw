@@ -28,10 +28,10 @@ public class GWIntegerInput extends BrIntegerInput {
       String value = action.replace("{isreadonly}", "");
       WebElement element = find();
       Assert.assertTrue("Element is not 'readonly', but it should be", "div".equalsIgnoreCase(element.getTagName()));
-      Assert.assertEquals("Text does not match", value, element.getText());
+      Assert.assertEquals("Text does not match: " + name, value, element.getText());
       return;
     }
-    Assert.fail("custom action not supported yet: " + action);
+    Assert.fail("custom action not supported yet: " + name + " -> " + action);
   }
 
 }
