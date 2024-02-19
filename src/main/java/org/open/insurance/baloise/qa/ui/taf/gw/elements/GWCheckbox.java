@@ -62,6 +62,11 @@ public class GWCheckbox extends BrCheckbox {
       Assert.assertTrue("Checkbox seems to be visible, but should be hidden: " + name, clazz.contains("gw-hidden"));
       return;
     }
+    if (custom.startsWith("{isreadonly}")) {
+      custom = custom.replace("{isreadonly}", "");
+      Assert.assertEquals("Label der Checkbox stimmt nicht: " + name, custom, find().getText());
+      return;
+    }
     Assert.fail("command not implemented yet: " + name + " --> " + custom);
   }
 
@@ -81,7 +86,8 @@ public class GWCheckbox extends BrCheckbox {
     if (finder.isGW10_2_3()) {
       String attribute = find().getAttribute("class");
       Assert.assertFalse(
-          "Seems to be a hidden input -> isSelected does NOT work! Please adapt way of searching this checkbox: " + name,
+          "Seems to be a hidden input -> isSelected does NOT work! Please adapt way of searching this checkbox: "
+              + name,
           attribute.contains("hidden"));
       return attribute.contains("gw-checked");
     }

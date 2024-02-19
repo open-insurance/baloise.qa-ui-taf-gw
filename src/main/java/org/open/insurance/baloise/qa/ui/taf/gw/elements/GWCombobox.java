@@ -17,10 +17,8 @@ package org.open.insurance.baloise.qa.ui.taf.gw.elements;
 
 import java.util.List;
 
-import org.asynchttpclient.request.body.multipart.Part;
 import org.junit.Assert;
 import org.open.insurance.baloise.qa.ui.taf.gw.finder.GWBrFinder;
-import org.open.insurance.baloise.qa.ui.taf.gw.finder.GWFrameworkVersion;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
