@@ -225,10 +225,10 @@ public class GWCombobox extends BrStringInput {
         String text = finder.safeInvoke(() -> {
           return new Select(find()).getFirstSelectedOption().getText();
         });
-        Assert.assertEquals("Value of input line does not match", action, text);
+        Assert.assertEquals("Value of input line does not match: " + name, action, text);
         return;
       }
-      Assert.assertEquals("Value of input line does not match", action, find().getAttribute("value"));
+      Assert.assertEquals("Value of input line does not match: " + name, action, find().getAttribute("value"));
       return;
     }
     if (action.startsWith("{checkexactly}")) {
@@ -247,12 +247,12 @@ public class GWCombobox extends BrStringInput {
             .findElement(By.xpath("//div[contains(@class, 'x-boundlist') and not(contains(@style, 'display: none'))]"));
         listElements = list.findElements(By.xpath(".//li"));
       }
-      Assert.assertEquals("Number of elements in list is not equal to number of expected elements",
+      Assert.assertEquals("Number of elements in list is not equal to number of expected elements: " + name,
           exactElements.length, listElements.size());
 
       for (int i = 0; i < exactElements.length; i++) {
         WebElement e = listElements.get(i);
-        Assert.assertEquals("Element does not fit", exactElements[i], e.getText());
+        Assert.assertEquals("Element does not fit: " + name, exactElements[i], e.getText());
       }
       find().click();
       return;
@@ -269,7 +269,7 @@ public class GWCombobox extends BrStringInput {
       fillWithPartialText();
       return;
     }
-    Assert.fail("custom action not supported yet: " + action);
+    Assert.fail("custom action not supported yet: " + name + " -> " + action);
   }
 
   private void fillWithPartialText() {
