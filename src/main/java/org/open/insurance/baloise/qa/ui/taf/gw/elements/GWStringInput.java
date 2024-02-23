@@ -34,6 +34,10 @@ public class GWStringInput extends BrStringInput {
       Assert.assertEquals("Element is not correctly filled: " + name, value, element.getAttribute("value"));
       return;
     }
+    if (action.equals("{isdisabled}")) {
+      Assert.assertFalse("Combocox is enabled, but should be disabled: " + name, find().isEnabled());
+      return;
+    }
     Assert.fail("custom action not supported yet: " + name + " -> " + action);
   }
 
