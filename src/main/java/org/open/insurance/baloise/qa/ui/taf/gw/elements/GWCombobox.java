@@ -271,6 +271,7 @@ public class GWCombobox extends BrStringInput {
     }
     if (action.equals("{isdisabled}")) {
       Assert.assertFalse("Combocox is enabled, but should be disabled: " + name, find().isEnabled());
+      return;
     }
     Assert.fail("custom action not supported yet: " + name + " -> " + action);
   }
