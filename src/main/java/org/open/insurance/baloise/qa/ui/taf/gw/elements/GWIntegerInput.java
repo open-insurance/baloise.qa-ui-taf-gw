@@ -31,6 +31,12 @@ public class GWIntegerInput extends BrIntegerInput {
       Assert.assertEquals("Text does not match: " + name, value, element.getText());
       return;
     }
+    if (action.startsWith("{isfilledwith}")) {
+      String value = action.replace("{isfilledwith}", "");
+      WebElement element = find();
+      Assert.assertEquals("Element is not correctly filled: " + name, value, element.getAttribute("value"));
+      return;
+    }
     Assert.fail("custom action not supported yet: " + name + " -> " + action);
   }
 

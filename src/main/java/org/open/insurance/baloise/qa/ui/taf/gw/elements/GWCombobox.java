@@ -297,7 +297,7 @@ public class GWCombobox extends BrStringInput {
   private void assertIsReadOnly(String action) {
     String value = action.replace("{isreadonly}", "");
     WebElement element = find();
-    Assert.assertTrue("Element is not 'readonly', but it should be", "div".equalsIgnoreCase(element.getTagName()));
+    Assert.assertTrue("Element is not 'readonly', but it should be: " + name, "div".equalsIgnoreCase(element.getTagName()));
     Assert.assertEquals("Text does not match", value, element.getText());
   }
 
