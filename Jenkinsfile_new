@@ -1,0 +1,52 @@
+@Library('jenkins-shared-library@master') _
+
+pipeline {
+  agent {
+    kubernetes(agents()
+        .maven().version('3.9.4-jdk8').profile('medium')
+        .startContainers())
+  	}
+  	
+    options {
+        skipStagesAfterUnstable()
+        disableConcurrentBuilds()
+        buildDiscarder(logRotator(numToKeepStr: '28'))
+        timeout(time: 1, unit: 'HOURS')
+    }
+
+    triggers {
+        // at least once a day
+        cron('H H(0-7) * * *')
+        // every sixty minutes
+        pollSCM('H/5 * * * *')
+    }
+
+    stages {
+        stage("SCM Checkout") {
+            steps {
+                deleteDir()
+                checkout scm
+            }
+        }
+
+        stage("Maven") {
+            steps {
+               	container('maven') {
+	                script {
+			            mavenDeploy args: "clean deploy -U"
+        	        }
+        	    }
+            }
+        }
+        
+        stage("Nexus Lifecycle") {
+            steps {
+               	container('maven') {
+	                nexusPolicyEvaluation iqApplication: 'org.open.insurance.baloise.qa.ui.taf.gw', 
+                                  iqScanPatterns: [[scanPattern: '**/target/dependency/*.jar']], 
+                                  iqStage: 'build'
+                }
+            }
+        }
+    }
+}
