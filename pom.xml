@@ -14,7 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
@@ -44,8 +45,8 @@
 
 	<repositories>
 		<repository>
-		    <id>jitpack.io</id>
-		    <url>https://jitpack.io</url>
+			<id>jitpack.io</id>
+			<url>https://jitpack.io</url>
 		</repository>
 	</repositories>
 
@@ -84,7 +85,8 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.22.0</version>
 			</plugin>
-			<!-- https://github.com/codecov/example-java-maven#produce-coverage-reports -->
+			<!--
+			https://github.com/codecov/example-java-maven#produce-coverage-reports -->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>cobertura-maven-plugin</artifactId>
@@ -120,4 +122,16 @@
 			</resource>
 		</resources>
 	</build>
+
+	<distributionManagement>
+		<repository>
+			<id>baloise-releases</id>
+			<url>https://nexus.balgroupit.com/repository/baloise-ch-releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>baloise-snapshots</id>
+			<url>https://nexus.balgroupit.com/repository/baloise-ch-snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
+
 </project>
