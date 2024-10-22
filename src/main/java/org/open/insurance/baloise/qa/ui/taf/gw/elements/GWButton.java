@@ -2,6 +2,8 @@ package org.open.insurance.baloise.qa.ui.taf.gw.elements;
 
 import org.junit.Assert;
 import org.open.insurance.baloise.qa.ui.taf.gw.finder.GWBrFinder;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 
 import com.baloise.testautomation.taf.browser.elements.BrButton;
 
@@ -34,6 +36,17 @@ public class GWButton extends BrButton {
           // TODO: GW10 after '||'
           || find().getAttribute("class").contains("gw-focus");
     });
+  }
+
+  @Override
+  public WebElement find() {
+    if (by instanceof ByLabel) {
+      String text = ((ByLabel)by).value();
+      String xpath = "//div[contains(., '" + text + "') and @role='button']";
+      System.out.println(xpath);
+      return getDriver().findElement(By.xpath(xpath));
+    }
+    return super.find();
   }
 
   @Override

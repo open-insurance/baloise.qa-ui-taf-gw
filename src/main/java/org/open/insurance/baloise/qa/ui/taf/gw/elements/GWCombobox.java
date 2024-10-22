@@ -20,6 +20,7 @@ import java.util.List;
 import org.junit.Assert;
 import org.open.insurance.baloise.qa.ui.taf.gw.finder.GWBrFinder;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.UnexpectedTagNameException;
@@ -79,28 +80,24 @@ public class GWCombobox extends BrStringInput {
         cb.selectByVisibleText(fillValueAsString());
         return;
       }
+
       // TODO GW10 - ...bis hierher
       // Ev. wenn GW9 nicht mehr gebraucht wird, dann GWCombobox ableiten von BrCombobox -> obiger Code wird hinfällig
       // sein, da dann brFindByCustom
       // am richtigen Ort implementiert ist und aufgerufen wird.
 
-      BrCombobox combobox = new BrCombobox();
-      combobox.setName(getName());
-      combobox.setComponent(component);
-      combobox.setBy(by);
-      combobox.setFill(fillValue.asTafString());
       if ("{checkthatnotexists}".equalsIgnoreCase(fillValue.asString())) {
         fillValue = TafString.normalString("{custom}{notvisible}");
         fillCustom();
         return;
       }
-      if (fillValue.asString().equals(combobox.get().asString())) {
+      if (fillValue.asString().equals(get().asString())) {
         return;
       }
       for (int i = 0; i < 5; i++) {
         try {
-          combobox.click();
-          if (combobox.find().getAttribute("class").contains("gw-focus")) {
+          click();
+          if (find().getAttribute("class").contains("gw-focus")) {
             break;
           }
           else {
@@ -112,7 +109,7 @@ public class GWCombobox extends BrStringInput {
         }
         catch (Throwable t) {}
       }
-      combobox.fill();
+      gwFill();
       return;
     }
     long timeout = finder.getTimeoutInMsecs();
@@ -138,23 +135,38 @@ public class GWCombobox extends BrStringInput {
     Assert.assertTrue("Not correctly filled: " + name, filled);
   }
 
-  @Override
-  public TafString get() {
-    GWBrFinder finder = (GWBrFinder)component.getBrowserFinder();
-    if (finder.isGW10()) {
-      try {
-        BrCombobox combobox = new BrCombobox();
-        combobox.setName(getName());
-        combobox.setComponent(component);
-        combobox.setBy(by);
-        return combobox.get();
+  private void gwFill() {
+    if (fillValue != null) {
+      if (fillValue.isCustom()) {
+        fillCustom();
+        return;
       }
-      catch (Throwable t) {
-        // Maybe it's a readonly-case...
-        return TafString.normalString(find().getText());
+      if (!fillValue.isSkip() && fillValue.isNotNull()) {
+        getFinder().safeInvoke(() -> {
+          WebElement we = find();
+          Select s = new Select(we);
+          s.selectByVisibleText(fillValue.asString());
+        });
       }
     }
-    return super.get();
+  }
+
+  private WebElement brFindByLabel() {
+    String label = ((ByLabel)by).value();
+    String xpath = "//div[contains(@class, 'gw-InputWidget') and .//div[@class='gw-label' and text()='" + label + "']]";
+    GWBrFinder finder = (GWBrFinder)component.getBrowserFinder();
+    return finder.getDriver().findElement(
+        By.xpath(xpath + "//select" + "|" + xpath + "//div[@data-gw-getset='select']//div[@class='gw-label']"));
+  }
+
+  @Override
+  public TafString get() {
+    WebElement cb = find();
+    if (cb.getTagName().equals("select")) {
+      Select s = new Select(cb);
+      return TafString.normalString(s.getFirstSelectedOption().getText());
+    }
+    return TafString.normalString(cb.getText());
   }
 
   @Override
@@ -197,6 +209,14 @@ public class GWCombobox extends BrStringInput {
     for (String action : actions) {
       fillCustom(action);
     }
+  }
+
+  @Override
+  public WebElement find() {
+    if (by instanceof ByLabel) {
+      return brFindByLabel();
+    }
+    return super.find();
   }
 
   private void fillCustom(String action) {
@@ -297,7 +317,8 @@ public class GWCombobox extends BrStringInput {
   private void assertIsReadOnly(String action) {
     String value = action.replace("{isreadonly}", "");
     WebElement element = find();
-    Assert.assertTrue("Element is not 'readonly', but it should be: " + name, "div".equalsIgnoreCase(element.getTagName()));
+    Assert.assertTrue("Element is not 'readonly', but it should be: " + name,
+        "div".equalsIgnoreCase(element.getTagName()));
     Assert.assertEquals("Text does not match", value, element.getText());
   }
 
