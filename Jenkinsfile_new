@@ -33,7 +33,7 @@ pipeline {
             steps {
                	container('maven') {
 	                script {
-			            mavenDeploy args: "clean deploy -U"
+			            mavenDeploy args: "-U"
         	        }
         	    }
             }
