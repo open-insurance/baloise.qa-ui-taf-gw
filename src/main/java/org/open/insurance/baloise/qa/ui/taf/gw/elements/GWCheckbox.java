@@ -49,11 +49,11 @@ public class GWCheckbox extends BrCheckbox {
       Assert.fail("element was found but should NOT: " + name);
     }
     if ("{isselected}".equalsIgnoreCase(custom)) {
-      Assert.assertTrue("is NOT selected, but should be", isSelected());
+      Assert.assertTrue("is NOT selected, but should be: " + name, isSelected());
       return;
     }
     if ("{isnotselected}".equalsIgnoreCase(custom)) {
-      Assert.assertFalse("is selected, but should NOT be", isSelected());
+      Assert.assertFalse("is selected, but should NOT be: " + name, isSelected());
       return;
     }
     if ("{alwaysincluded}".equalsIgnoreCase(custom)) {

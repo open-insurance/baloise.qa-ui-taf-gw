@@ -19,8 +19,8 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Assert;
 import org.open.insurance.baloise.qa.ui.taf.gw.finder.GWBrFinder;
-import org.open.insurance.baloise.qa.ui.taf.gw.finder.GWFrameworkVersion;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 
 import com.baloise.testautomation.taf.browser.elements.BrRadiobutton;
@@ -30,44 +30,6 @@ public class GWRadioButton extends BrRadiobutton {
   @Override
   public void checkCustom() {
     doCustom(checkValue.getCustom());
-  }
-
-  private void doCustom(String custom) {
-    System.out.println("Starting custom action: " + name + " --> " + custom);
-    if ("{notvisible}".equalsIgnoreCase(custom)) {
-      Long timeoutInMsecs = component.getBrowserFinder().getTimeoutInMsecs();
-      try {
-        component.getBrowserFinder().setTimeoutInMsecs(200L);
-        find();
-      }
-      catch (Throwable e) {
-        return;
-      }
-      finally {
-        component.getBrowserFinder().setTimeoutInMsecs(timeoutInMsecs);
-      }
-      Assert.fail("element was found but should NOT: " + name);
-    }
-    if ("{isselected}".equalsIgnoreCase(custom)) {
-      Assert.assertTrue("Radio button NOT selected, but should be: " + name, isSelected());
-      return;
-    }
-    if ("{isnotselected}".equalsIgnoreCase(custom)) {
-      Assert.assertFalse("Radio button selected, but should NOT be: " + name, isSelected());
-      return;
-    }
-    if ("{isreadonly}".equalsIgnoreCase(custom)) {
-      GWBrFinder finder = (GWBrFinder)component.getBrowserFinder();
-      if (finder.isGW10_2_3()) {
-        String attribute = find().getAttribute("class");
-        Assert.assertTrue("Radio button NOT readonly, but should be: " + name,
-            attribute.contains("gw-readonly") && attribute.contains("gw-BooleanRadioValueWidget"));
-        return;
-      }
-      Assert.assertTrue("Radio button NOT readonly, but should be", "div".equals(find().getTagName()));
-      return;
-    }
-    Assert.fail("command not implemented yet: " + name + " --> " + custom);
   }
 
   @Override
@@ -108,14 +70,12 @@ public class GWRadioButton extends BrRadiobutton {
     return parent.getAttribute("class").contains("x-form-cb-checked");
   }
 
-  private void log(String s) {
-    System.out.println(s);
-  }
-
   @Override
   public void select() {
     for (int i = 0; i < 5; i++) {
       component.getBrowserFinder().safeInvoke(() -> {
+        ((JavascriptExecutor)((GWBrFinder)component.getBrowserFinder()).getDriver())
+            .executeScript("arguments[0].scrollIntoView(true);", find());
         find().click();
       });
       if (isSelected()) {
@@ -128,6 +88,48 @@ public class GWRadioButton extends BrRadiobutton {
       catch (Exception e) {}
     }
     Assert.fail("Could NOT select radio button: " + name);
+  }
+
+  private void doCustom(String custom) {
+    System.out.println("Starting custom action: " + name + " --> " + custom);
+    if ("{notvisible}".equalsIgnoreCase(custom)) {
+      Long timeoutInMsecs = component.getBrowserFinder().getTimeoutInMsecs();
+      try {
+        component.getBrowserFinder().setTimeoutInMsecs(200L);
+        find();
+      }
+      catch (Throwable e) {
+        return;
+      }
+      finally {
+        component.getBrowserFinder().setTimeoutInMsecs(timeoutInMsecs);
+      }
+      Assert.fail("element was found but should NOT: " + name);
+    }
+    if ("{isselected}".equalsIgnoreCase(custom)) {
+      Assert.assertTrue("Radio button NOT selected, but should be: " + name, isSelected());
+      return;
+    }
+    if ("{isnotselected}".equalsIgnoreCase(custom)) {
+      Assert.assertFalse("Radio button selected, but should NOT be: " + name, isSelected());
+      return;
+    }
+    if ("{isreadonly}".equalsIgnoreCase(custom)) {
+      GWBrFinder finder = (GWBrFinder)component.getBrowserFinder();
+      if (finder.isGW10_2_3()) {
+        String attribute = find().getAttribute("class");
+        Assert.assertTrue("Radio button NOT readonly, but should be: " + name,
+            attribute.contains("gw-readonly") && attribute.contains("gw-BooleanRadioValueWidget"));
+        return;
+      }
+      Assert.assertTrue("Radio button NOT readonly, but should be", "div".equals(find().getTagName()));
+      return;
+    }
+    Assert.fail("command not implemented yet: " + name + " --> " + custom);
+  }
+
+  private void log(String s) {
+    System.out.println(s);
   }
 
 }
