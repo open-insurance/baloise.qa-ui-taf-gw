@@ -32,6 +32,45 @@ public class GWCheckbox extends BrCheckbox {
     doCustom(checkValue.getCustom());
   }
 
+  @Override
+  public void fillCustom() {
+    doCustom(fillValue.getCustom());
+  }
+
+  @Override
+  public TafBoolean get() {
+    return new TafBoolean(isSelected());
+  }
+
+  @Override
+  public boolean isSelected() {
+    GWBrFinder finder = (GWBrFinder)component.getBrowserFinder();
+    if (finder.isGW10_2_3() || finder.isGW10_2_4()) {
+      String attribute = find().getAttribute("class");
+      Assert.assertFalse(
+          "Seems to be a hidden input -> isSelected does NOT work! Please adapt way of searching this checkbox: "
+              + name,
+          attribute.contains("hidden"));
+      return attribute.contains("gw-checked");
+    }
+    if (finder.isGW10()) {
+      return super.isSelected();
+    }
+    boolean found = false;
+    WebElement parent = find();
+    while (!found) {
+      parent = parent.findElement(By.xpath(".."));
+      assertNotNull("checkbox does not have a parent --> selection state cannot be determined", parent);
+      String klass = parent.getAttribute("class");
+      if (klass != null) {
+        if (klass.contains("x-form-type-checkbox")) {
+          found = true;
+        }
+      }
+    }
+    return parent.getAttribute("class").contains("x-form-cb-checked");
+  }
+
   private void doCustom(String custom) {
     System.out.println("Starting custom action: " + name + " --> " + custom);
     if ("{notvisible}".equalsIgnoreCase(custom)) {
@@ -68,45 +107,6 @@ public class GWCheckbox extends BrCheckbox {
       return;
     }
     Assert.fail("command not implemented yet: " + name + " --> " + custom);
-  }
-
-  @Override
-  public void fillCustom() {
-    doCustom(fillValue.getCustom());
-  }
-
-  @Override
-  public TafBoolean get() {
-    return new TafBoolean(isSelected());
-  }
-
-  @Override
-  public boolean isSelected() {
-    GWBrFinder finder = (GWBrFinder)component.getBrowserFinder();
-    if (finder.isGW10_2_3()) {
-      String attribute = find().getAttribute("class");
-      Assert.assertFalse(
-          "Seems to be a hidden input -> isSelected does NOT work! Please adapt way of searching this checkbox: "
-              + name,
-          attribute.contains("hidden"));
-      return attribute.contains("gw-checked");
-    }
-    if (finder.isGW10()) {
-      return super.isSelected();
-    }
-    boolean found = false;
-    WebElement parent = find();
-    while (!found) {
-      parent = parent.findElement(By.xpath(".."));
-      assertNotNull("checkbox does not have a parent --> selection state cannot be determined", parent);
-      String klass = parent.getAttribute("class");
-      if (klass != null) {
-        if (klass.contains("x-form-type-checkbox")) {
-          found = true;
-        }
-      }
-    }
-    return parent.getAttribute("class").contains("x-form-cb-checked");
   }
 
 }

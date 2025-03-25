@@ -29,25 +29,13 @@ public class GWBrFinder extends BrFinder {
 
   private GWFrameworkVersion version = GWFrameworkVersion.gw9;
 
-  public GWBrFinder(WebDriver driver, int timeoutInSeconds, GWFrameworkVersion version) {
-    super(driver, timeoutInSeconds);
-    this.version = version;
-  }
-
   public GWBrFinder(WebDriver driver, int timeoutInSeconds) {
     super(driver, timeoutInSeconds);
   }
 
-  public boolean isGW10() {
-    return version.equals(GWFrameworkVersion.gw10_2_2) || version.equals(GWFrameworkVersion.gw10_2_3);
-  }
-
-  public boolean isGW10_2_3() {
-    return version.equals(GWFrameworkVersion.gw10_2_3);
-  }
-
-  public GWFrameworkVersion getVersion() {
-    return version;
+  public GWBrFinder(WebDriver driver, int timeoutInSeconds, GWFrameworkVersion version) {
+    super(driver, timeoutInSeconds);
+    this.version = version;
   }
 
   public Object executeJavascript(String script) {
@@ -61,6 +49,14 @@ public class GWBrFinder extends BrFinder {
       result = "";
     }
     return result;
+  }
+
+  public WebDriver getDriverWithoutWaitUntilLoadingComplete() {
+    return driver;
+  }
+
+  public GWFrameworkVersion getVersion() {
+    return version;
   }
 
   public boolean isAjaxDone() {
@@ -80,6 +76,19 @@ public class GWBrFinder extends BrFinder {
       finally {}
     }
     return true;
+  }
+
+  public boolean isGW10() {
+    return version.equals(GWFrameworkVersion.gw10_2_2) || version.equals(GWFrameworkVersion.gw10_2_3)
+        || version.equals(GWFrameworkVersion.gw10_2_4);
+  }
+
+  public boolean isGW10_2_3() {
+    return version.equals(GWFrameworkVersion.gw10_2_3);
+  }
+
+  public boolean isGW10_2_4() {
+    return version.equals(GWFrameworkVersion.gw10_2_4);
   }
 
   public void waitForAjaxDone(int seconds) {
@@ -103,10 +112,6 @@ public class GWBrFinder extends BrFinder {
   public void waitUntilLoadingComplete() {
     assertNotNull("Driver is NOT assigend --> no waitingUntilLoadingComplete possible", driver);
     waitForAjaxDone(120);
-  }
-
-  public WebDriver getDriverWithoutWaitUntilLoadingComplete() {
-    return driver;
   }
 
 }

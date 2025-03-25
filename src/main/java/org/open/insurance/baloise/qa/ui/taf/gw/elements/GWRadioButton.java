@@ -41,7 +41,7 @@ public class GWRadioButton extends BrRadiobutton {
   public boolean isSelected() {
     log("Check if radiobutton is selected: " + name);
     GWBrFinder finder = (GWBrFinder)component.getBrowserFinder();
-    if (finder.isGW10_2_3()) {
+    if (finder.isGW10_2_3() || finder.isGW10_2_4()) {
       String attribute = find().getAttribute("class");
       Assert.assertTrue("Seems NOT to be a radiobutton: " + name, attribute.contains("gw-radioDiv"));
       return attribute.contains("gw-checked");
@@ -116,7 +116,7 @@ public class GWRadioButton extends BrRadiobutton {
     }
     if ("{isreadonly}".equalsIgnoreCase(custom)) {
       GWBrFinder finder = (GWBrFinder)component.getBrowserFinder();
-      if (finder.isGW10_2_3()) {
+      if (finder.isGW10_2_3() || finder.isGW10_2_4()) {
         String attribute = find().getAttribute("class");
         Assert.assertTrue("Radio button NOT readonly, but should be: " + name,
             attribute.contains("gw-readonly") && attribute.contains("gw-BooleanRadioValueWidget"));
