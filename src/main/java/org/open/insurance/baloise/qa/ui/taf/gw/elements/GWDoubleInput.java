@@ -35,4 +35,14 @@ public class GWDoubleInput extends BrDoubleInput {
     return null;
   }
 
+  @Override
+  public TafDouble get() {
+    String text = getFinder().safeInvoke(() -> find().getAttribute("value"));
+    // might be a readonly field... if so -> get the plain text
+    if (text == null) {
+      text = getFinder().safeInvoke(() -> find().getText());
+    }
+    return new TafDouble(text);
+  }
+
 }

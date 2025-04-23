@@ -9,13 +9,21 @@ import com.baloise.testautomation.taf.browser.elements.BrButton;
 
 public class GWButton extends BrButton {
 
-  private void waitUntilEnabled() {
-    Long time = System.currentTimeMillis();
-    while (isDisabled()) {
-      if (System.currentTimeMillis() > time + 60000L) {
-        Assert.fail("Button ist not enabled since more than one minute");
-      }
+  @Override
+  public void click() {
+    waitUntilEnabled();
+    super.click();
+  }
+
+  @Override
+  public WebElement find() {
+    if (by instanceof ByLabel) {
+      String text = ((ByLabel)by).value();
+      String xpath = "//div[contains(., '" + text + "') and @role='button']";
+      System.out.println(xpath);
+      return getDriver().findElement(By.xpath(xpath));
     }
+    return super.find();
   }
 
   public boolean isDisabled() {
@@ -38,20 +46,12 @@ public class GWButton extends BrButton {
     });
   }
 
-  @Override
-  public WebElement find() {
-    if (by instanceof ByLabel) {
-      String text = ((ByLabel)by).value();
-      String xpath = "//div[contains(., '" + text + "') and @role='button']";
-      System.out.println(xpath);
-      return getDriver().findElement(By.xpath(xpath));
+  private void waitUntilEnabled() {
+    Long time = System.currentTimeMillis();
+    while (isDisabled()) {
+      if (System.currentTimeMillis() > time + 60000L) {
+        Assert.fail("Button ist not enabled since more than one minute");
+      }
     }
-    return super.find();
-  }
-
-  @Override
-  public void click() {
-    waitUntilEnabled();
-    super.click();
   }
 }
