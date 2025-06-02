@@ -20,7 +20,6 @@ import java.util.List;
 import org.junit.Assert;
 import org.open.insurance.baloise.qa.ui.taf.gw.finder.GWBrFinder;
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.UnexpectedTagNameException;
@@ -31,6 +30,39 @@ import com.baloise.testautomation.taf.browser.elements.BrCombobox;
 import com.baloise.testautomation.taf.browser.elements.BrStringInput;
 
 public class GWCombobox extends BrStringInput {
+
+  @Override
+  public void check() {
+    if (!canCheck()) {
+      return;
+    }
+    if (checkValue.isCustom()) {
+      checkCustom();
+      return;
+    }
+    GWBrFinder finder = (GWBrFinder)component.getBrowserFinder();
+    if (finder.isGW10()) {
+      System.out.println("Combo: " + name + " -> " + checkValueAsString());
+      if (by instanceof ByCustom) {
+        Select cb = new Select((WebElement)brFindByCustom());
+        Assert.assertEquals("Contents does not fit", checkValueAsString(), cb.getFirstSelectedOption().getText());
+        return;
+      }
+      BrCombobox combobox = new BrCombobox();
+      combobox.setName(getName());
+      combobox.setComponent(component);
+      combobox.setBy(by);
+      combobox.setCheck(checkValue.asTafString());
+      try {
+        combobox.check();
+      }
+      catch (UnexpectedTagNameException e) {
+        Assert.fail("Probably, the combobox is read-only but should not be: " + name);
+      }
+      return;
+    }
+    super.check();
+  }
 
   @Override
   public void checkCustom() {
@@ -91,7 +123,7 @@ public class GWCombobox extends BrStringInput {
         fillCustom();
         return;
       }
-      if (fillValue.asString().equals(get().asString())) {
+      if (!isReadOnly() && (fillValue.asString().equals(get().asString()))) {
         return;
       }
       for (int i = 0; i < 5; i++) {
@@ -135,73 +167,6 @@ public class GWCombobox extends BrStringInput {
     Assert.assertTrue("Not correctly filled: " + name, filled);
   }
 
-  private void gwFill() {
-    if (fillValue != null) {
-      if (fillValue.isCustom()) {
-        fillCustom();
-        return;
-      }
-      if (!fillValue.isSkip() && fillValue.isNotNull()) {
-        getFinder().safeInvoke(() -> {
-          WebElement we = find();
-          Select s = new Select(we);
-          s.selectByVisibleText(fillValue.asString());
-        });
-      }
-    }
-  }
-
-  private WebElement brFindByLabel() {
-    String label = ((ByLabel)by).value();
-    String xpath = "//div[contains(@class, 'gw-InputWidget') and .//div[@class='gw-label' and text()='" + label + "']]";
-    GWBrFinder finder = (GWBrFinder)component.getBrowserFinder();
-    return finder.getDriver().findElement(
-        By.xpath(xpath + "//select" + "|" + xpath + "//div[@data-gw-getset='select']//div[@class='gw-label']"));
-  }
-
-  @Override
-  public TafString get() {
-    WebElement cb = find();
-    if (cb.getTagName().equals("select")) {
-      Select s = new Select(cb);
-      return TafString.normalString(s.getFirstSelectedOption().getText());
-    }
-    return TafString.normalString(cb.getText());
-  }
-
-  @Override
-  public void check() {
-    if (!canCheck()) {
-      return;
-    }
-    if (checkValue.isCustom()) {
-      checkCustom();
-      return;
-    }
-    GWBrFinder finder = (GWBrFinder)component.getBrowserFinder();
-    if (finder.isGW10()) {
-      System.out.println("Combo: " + name + " -> " + checkValueAsString());
-      if (by instanceof ByCustom) {
-        Select cb = new Select((WebElement)brFindByCustom());
-        Assert.assertEquals("Contents does not fit", checkValueAsString(), cb.getFirstSelectedOption().getText());
-        return;
-      }
-      BrCombobox combobox = new BrCombobox();
-      combobox.setName(getName());
-      combobox.setComponent(component);
-      combobox.setBy(by);
-      combobox.setCheck(checkValue.asTafString());
-      try {
-        combobox.check();
-      }
-      catch (UnexpectedTagNameException e) {
-        Assert.fail("Probably, the combobox is read-only but should not be: " + name);
-      }
-      return;
-    }
-    super.check();
-  }
-
   @Override
   public void fillCustom() {
     String custom = fillValue.getCustom();
@@ -217,6 +182,32 @@ public class GWCombobox extends BrStringInput {
       return brFindByLabel();
     }
     return super.find();
+  }
+
+  @Override
+  public TafString get() {
+    WebElement cb = find();
+    if (cb.getTagName().equals("select")) {
+      Select s = new Select(cb);
+      return TafString.normalString(s.getFirstSelectedOption().getText());
+    }
+    return TafString.normalString(cb.getText());
+  }
+
+  private void assertIsReadOnly(String action) {
+    String value = action.replace("{isreadonly}", "");
+    WebElement element = find();
+    Assert.assertTrue("Element is not 'readonly', but it should be: " + name,
+        "div".equalsIgnoreCase(element.getTagName()));
+    Assert.assertEquals("Text does not match", value, element.getText());
+  }
+
+  private WebElement brFindByLabel() {
+    String label = ((ByLabel)by).value();
+    String xpath = "//div[contains(@class, 'gw-InputWidget') and .//div[@class='gw-label' and text()='" + label + "']]";
+    GWBrFinder finder = (GWBrFinder)component.getBrowserFinder();
+    return finder.getDriver().findElement(
+        By.xpath(xpath + "//select" + "|" + xpath + "//div[@data-gw-getset='select']//div[@class='gw-label']"));
   }
 
   private void fillCustom(String action) {
@@ -314,12 +305,25 @@ public class GWCombobox extends BrStringInput {
     }
   }
 
-  private void assertIsReadOnly(String action) {
-    String value = action.replace("{isreadonly}", "");
+  private void gwFill() {
+    if (fillValue != null) {
+      if (fillValue.isCustom()) {
+        fillCustom();
+        return;
+      }
+      if (!fillValue.isSkip() && fillValue.isNotNull()) {
+        getFinder().safeInvoke(() -> {
+          WebElement we = find();
+          Select s = new Select(we);
+          s.selectByVisibleText(fillValue.asString());
+        });
+      }
+    }
+  }
+
+  private boolean isReadOnly() {
     WebElement element = find();
-    Assert.assertTrue("Element is not 'readonly', but it should be: " + name,
-        "div".equalsIgnoreCase(element.getTagName()));
-    Assert.assertEquals("Text does not match", value, element.getText());
+    return "div".equalsIgnoreCase(element.getTagName());
   }
 
   private void log(String s) {
