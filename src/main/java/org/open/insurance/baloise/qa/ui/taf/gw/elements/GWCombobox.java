@@ -15,6 +15,7 @@
  */
 package org.open.insurance.baloise.qa.ui.taf.gw.elements;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Assert;
@@ -192,6 +193,17 @@ public class GWCombobox extends BrStringInput {
       return TafString.normalString(s.getFirstSelectedOption().getText());
     }
     return TafString.normalString(cb.getText());
+  }
+
+  public List<String> getOptions() {
+    List<String> result = new ArrayList<String>();
+    List<WebElement> options = find().findElements(By.xpath(".//option"));
+    for (WebElement option : options) {
+      String fullText = option.getText();
+      System.out.println(fullText);
+      result.add(fullText);
+    }
+    return result;
   }
 
   private void assertIsReadOnly(String action) {
