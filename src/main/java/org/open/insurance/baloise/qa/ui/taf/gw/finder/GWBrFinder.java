@@ -91,6 +91,15 @@ public class GWBrFinder extends BrFinder {
     return version.equals(GWFrameworkVersion.gw10_2_4);
   }
 
+  @Override
+  public void setTimeoutInMsecs(Long msecs) {
+    if (msecs > 180000) {
+      throw new IllegalArgumentException(
+          "For timeouts > 3 minutes the underlying http-connection will time out first, so please use e.g. Awaitility framework or similar to realize such big timeouts in your calling code directly");
+    }
+    super.setTimeoutInMsecs(msecs);
+  }
+
   public void waitForAjaxDone(int seconds) {
     try {
       Thread.sleep(50);
@@ -113,5 +122,4 @@ public class GWBrFinder extends BrFinder {
     assertNotNull("Driver is NOT assigend --> no waitingUntilLoadingComplete possible", driver);
     waitForAjaxDone(120);
   }
-
 }
