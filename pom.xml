@@ -126,11 +126,11 @@
 	<distributionManagement>
 		<repository>
 			<id>baloise-releases</id>
-			<url>https://nexus.balgroupit.com/repository/baloise-ch-releases</url>
+			 <url>https://jfrog.balgroupit.com/artifactory/ch-arch-eng-maven</url>
 		</repository>
 		<snapshotRepository>
 			<id>baloise-snapshots</id>
-			<url>https://nexus.balgroupit.com/repository/baloise-ch-snapshots</url>
+			 <url>https://jfrog.balgroupit.com/artifactory/ch-arch-eng-maven</url>
 		</snapshotRepository>
 	</distributionManagement>
 

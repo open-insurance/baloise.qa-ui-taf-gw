@@ -3,7 +3,7 @@
 pipeline {
   agent {
     kubernetes(agents()
-        .maven().version('3.9.4-jdk8').profile('medium')
+        .maven().version('3.9.4-jdk8').profile('medium').withJFrog()
         .startContainers())
   	}
   	
