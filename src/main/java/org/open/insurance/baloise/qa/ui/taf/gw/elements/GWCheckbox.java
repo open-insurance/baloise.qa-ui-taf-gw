@@ -38,6 +38,14 @@ public class GWCheckbox extends BrCheckbox {
   }
 
   @Override
+  public WebElement find() {
+    if (by instanceof ByLabel) {
+      return brFindByLabel();
+    }
+    return super.find();
+  }
+
+  @Override
   public TafBoolean get() {
     return new TafBoolean(isSelected());
   }
@@ -69,6 +77,13 @@ public class GWCheckbox extends BrCheckbox {
       }
     }
     return parent.getAttribute("class").contains("x-form-cb-checked");
+  }
+
+  private WebElement brFindByLabel() {
+    String label = ((ByLabel)by).value();
+    String xpath = "//div[contains(@class, 'gw-InputWidget') and .//div[@class='gw-label' and text()='" + label + "']]";
+    GWBrFinder finder = (GWBrFinder)component.getBrowserFinder();
+    return finder.getDriver().findElement(By.xpath(xpath + "//div[@role='checkbox']"));
   }
 
   private void doCustom(String custom) {

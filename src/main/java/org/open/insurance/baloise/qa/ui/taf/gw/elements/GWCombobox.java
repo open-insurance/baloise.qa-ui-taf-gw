@@ -304,7 +304,7 @@ public class GWCombobox extends BrStringInput {
     if (finder.isGW10()) {
       List<WebElement> options = find().findElements(By.xpath(".//option"));
       for (WebElement option : options) {
-        String fullText = option.getAttribute("value");
+        String fullText = option.getText();
         if (fullText != null && fullText.contains(fillValueAsString())) {
           fillWith(fullText);
           return;
