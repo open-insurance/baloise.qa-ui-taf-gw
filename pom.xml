@@ -69,12 +69,12 @@
 		<dependency>
 			<groupId>com.baloise.testing.framework</groupId>
 			<artifactId>taf-browser</artifactId>
-			<version>0.0.9-SNAPSHOT</version>
+			<version>0.0.10-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.baloise.testing.framework</groupId>
 			<artifactId>taf-browser-junit4-extensions</artifactId>
-			<version>0.0.9-SNAPSHOT</version>
+			<version>0.0.10-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 
